@@ -5,7 +5,6 @@ on:
 
 env:
   CONTAINER_REGISTRY: docker.io
-  DOCKER_USERNAME: siddharth1
   IMAGE_NAME: github-actions-nginx
 
 jobs:
@@ -13,19 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Build
-        run: echo docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+        run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
 
       - name: Docker Login
-        env:
-          DOCKER_PASSWORD: s3curePaSsW0rd
-        run: echo docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ vars.DOCKER_USERNAME }} --password-stdin
 
       - name: Docker Publish
-        run: echo docker push $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+        run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
   deploy:
     needs: docker
     runs-on: ubuntu-latest
     steps:
       - name: Docker Run
-        run: docker run -d -p 8080:80 $CONTAINER_REGISTRY/$DOCKER_USERNAME/$IMAGE_NAME:latest
+        run: docker run -d -p 8080:80 ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
