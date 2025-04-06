@@ -1,0 +1,16 @@
+name: my first
+
+on: push
+
+jobs:
+   first-job:
+       runs-on: ubuntu-latest
+       steps:
+       - name: welcome
+         run: echo "My first"
+
+       - name: List files
+         run: ls
+
+      - name: Read file
+        run: cat README.md
