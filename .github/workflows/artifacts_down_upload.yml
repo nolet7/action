@@ -1,4 +1,4 @@
-name: Generate ASCII Artwork-artifacts
+name: Artifact Generate ASCII Artwork
 
 on:
   push
