@@ -11,15 +11,22 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Ì≥• Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Ì¥® Docker Build
+      - name: Docker Build
         run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
 
-      - name: Ì¥ê Docker Login
+      - name: Docker Login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ vars.DOCKER_USERNAME }} --password-stdin
 
-      - name: Ì≥§ Docker Push
+      - name: Docker Push
         run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Container
+        run: docker run -d -p 8080:80 ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
