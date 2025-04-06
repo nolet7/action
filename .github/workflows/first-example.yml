@@ -9,11 +9,11 @@ jobs:
        - name: welcome
          run: echo "My first"
 
-      - name: checkout
-        uses: actions/checkout@v4
+       - name: checkout
+         uses: actions/checkout@v4
 
        - name: List files
          run: ls
 
-      - name: Read file
-        run: cat README.md
+       - name: Read file
+         run: cat README.md
