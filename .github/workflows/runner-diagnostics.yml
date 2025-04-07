@@ -18,7 +18,9 @@ jobs:
         run: env
 
       - name: Show Runner Context
-        run: echo "Runner: ${{ toJson(runner) }}"
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
 
       - name: Dump System Info
         run: |
