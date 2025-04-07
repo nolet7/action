@@ -1,53 +1,34 @@
-name: "Runner and Step Debug Logging"
-
-# This combined workflow enables runner-level diagnostics
-# and step-level debug logging in a single execution.
+name: "Runner Diagnostics (Fixed)"
 
 on:
   workflow_dispatch:
 
 env:
-  ACTIONS_STEP_DEBUG: true  # Enable debug logging for each step
+  ACTIONS_STEP_DEBUG: true  # Enables debug logging for each step
 
 jobs:
   diagnostics:
-    name: Runner Diagnostic Logging
     runs-on: ubuntu-latest
     steps:
-      - name: Display Environment Info
+      - name: Show Environment
         run: env
 
-      - name: Show Runner Context
+      - name: Show Runner Info
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
         run: echo "$RUNNER_CONTEXT"
 
-      - name: Dump System Info
+      - name: Show Disk and Memory Info
         run: |
-          uname -a
-          lsb_release -a || cat /etc/os-release
-
-      - name: Disk & Memory Info
-        run: |
+          echo "Disk Info:"
           df -h
+          echo "\nMemory Info:"
           free -h
 
-  debug-steps:
-    name: Step Debug Logging
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: List Files in Repo
-        run: ls -la
-
-      - name: Print GitHub Context
-        run: echo "GitHub Context: ${{ toJson(github) }}"
-
-      - name: Simulate Custom Script Step
+      - name: Show System and Kernel Info
         run: |
-          echo "Starting step..."
-          echo "Processing something internal..."
-          echo "Step complete."
+          echo "System Info:"
+          uname -a
+          echo "\nOS Release Info:"
+          lsb_release -a || cat /etc/os-release
 
