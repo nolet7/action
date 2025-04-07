@@ -1,4 +1,4 @@
-name: Matrix: include, exclude, max-parallel, fail-fast
+name: "Matrix: include, exclude, max-parallel, fail-fast"
 
 on:
   push:
